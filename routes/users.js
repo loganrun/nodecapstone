@@ -4,26 +4,8 @@ const router = express.Router();
 const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
 const jsonParser = bodyParser.json();
-const {User, Owner} = require('../models/users');
-const expressValidator = require('express-validator');
+const {User} = require('../models/users');
 
-// router.use(expressValidator({
-//     customValidators: {
-//       isUsernameAvailable(username) {
-//         return new Promise((resolve, reject) => {
-//           User.findOne({ username: username }, (err, user) => {
-//             if (err) throw err;
-//             if(user == null) {
-//               resolve();
-//             } else {
-//               reject();
-//             }
-//           });
-//         });
-//       }
-//     }
-//   })
-// );
 
 router.get('/', (req, res, next)=>{
     User
@@ -116,7 +98,8 @@ router.post('/signup', jsonParser,(req, res, next)=>{
   firstName = firstName.trim();
   lastName = lastName.trim();
 
-  return User.find({username})
+  return User
+    .find({username})
     .count()
     .then(count => {
       if (count > 0) {
@@ -126,45 +109,35 @@ router.post('/signup', jsonParser,(req, res, next)=>{
            message: 'username already taken',
            location: 'username'
            });
-        // return res.status(422).json({
-        //     code: 422,
-        //   reason: 'ValidationError',
-        //   message: 'Username already taken',
-        //   location: 'username'
-        // });
-      }  
-        })
-      
-    .then(
-        User.find({emailAddress})
-        .count()
-        .then(count =>{
-            if(count >0){
-                return Promise.reject({
-                 code: 422,
-                   reason: 'ValidationError',
-                   message: 'Email already taken. If this is your account, please log in',
-                   location: 'emailAddress'
-               });
-            //   return res.status(422).json({
-            //           code:    422,
-            //           reason: 'ValidationError',
-            //           message: 'Email already taken. If this is your account, please log in',
-            //           location: 'emailAddress'
-            //       });
-            }
-            //return User.hashPassword(password);
-        })
+      }
+    })
+    .then(() => {
+          return User
+              .find({emailAddress})
+              .count();
+        }
     )
-    .then(
-       User.create({
-        username,
-        password,
-        emailAddress,
-        firstName,
-        role:   'Owner',
-        lastName
+      .then(count => {
+        if (count > 0) {
+          return Promise.reject({
+            code: 422,
+            reason: 'ValidationError',
+            message: 'Email already taken. If this is your account, please log in',
+            location: 'emailAddress'
+          });
+        }
+        return User.hashPassword(password);
       })
+    .then( hash => {
+          return User.create({
+            username,
+            password: hash,
+            emailAddress,
+            firstName,
+            role: 'Owner',
+            lastName
+          });
+        }
     )
     .then(user => {
       return res.status(201).json(user.serialize());
@@ -173,6 +146,7 @@ router.post('/signup', jsonParser,(req, res, next)=>{
       if (err.reason === 'ValidationError') {
         return res.status(err.code).json(err);
       }
+      console.log(err);
       res.status(500).json({code: 500, message: 'Internal server error'});
     });
 });
@@ -190,105 +164,3 @@ router.get('/', (req, res) => {
 module.exports = router;
 
     
-//     req.checkBody('username', 'Username already in use').isUsernameAvailable();
-//     //const neverUsed = ['password','username', 'emailAddress'];
-//   // let {username, password, firstName = '', lastName = '', emailAddress} = req.body;
-//     // User.find({username})
-//     // .count()
-//     // .then(count =>{
-//     //     if (count > 0){
-//     //         return Promise.reject({
-//     //           code: 422,
-//     //           reason: 'ValidationError',
-//     //           message: 'username already taken',
-//     //           location: 'username'
-//     //         });
-            
-//     //     }
-//     // });
-//     var errors = req.validationErrors(true);
-
-//     if(errors) {
-
-//         return res.json({
-//             success: false,
-//             errors: errors
-//         });
-        
-
-//     }
-
-
-//     const user = new User({
-//         _id: new mongoose.Types.ObjectId(),
-//         username:   req.body.username,
-//         password:   req.body.password,
-//         firstName:  req.body.firstName,
-//         lastName:   req.body.lastName,
-//         emailAddress: req.body.emailAddress,
-//         role:       'Owner'
-//     });
-//     user.save().then(result =>{
-//         console.log(result);
-//     })
-//     .catch(err =>{
-//         console.log(err);
-//     });
-//     res.status(201).json({
-//         message: 'new user created',
-//         createdUser: user
-//     });
-// });
-
-
-
-
-
-
-// router.get('/:id', (req, res, next)=>{
-//     res.status(200).json({
-//         message: 'get specific properties'
-        
-//     });
-// });
-
-// router.put('/:id', (req, res, next)=>{
-//     res.status(200).json({
-//         message: 'update property'
-//     });
-// });
-
-// router.delete('/:id', (req, res, next)=>{
-//     res.status(200).json({
-//         message: 'remove property'
-//     });
-// });
-
-//let {username, password, firstName = '', lastName = '', emailAddress} = req.body;
-    //   firstName = firstName.trim();
-    //   lastName = lastName.trim();
-    //   return User.find({username})
-    //   .count()
-    //   .then(count => {
-    //       if (count > 0) {
-    //           return Promise.reject({
-    //               code: 422,
-    //               reason: 'ValidationError',
-    //               message: 'username already taken',
-    //               location: 'username'
-    //           });
-    //       }
-    //   })
-    //   .then(User.find({emailAddress})
-    //   .count()
-    //   .then(count =>{
-    //       if (count > 0){
-    //           return Promise.reject({
-    //               code: 422,
-    //               reason: 'ValidationError',
-    //               message: 'email already taken. Please sign in',
-    //               location: 'emailAddress'
-    //           })
-    //       }
-    //   })
-    //   .then

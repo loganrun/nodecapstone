@@ -2,14 +2,16 @@ const express = require('express');
 const router = express.Router();
 const bodyParser = require('body-parser');
 const jsonParser = bodyParser.json();
+const passport = require('passport');
 const mongoose = require('mongoose');
 const {User, Resident} = require('../models/users');
 const Unit = require('../models/units');
 const Lease = require('../models/leases');
 const permit = require("../permissions")
+const jwtAuth = passport.authenticate('jwt', {session: false});
 
 
-router.get('/', (req, res)=>{
+router.get('/',jwtAuth, permit('Owner'), (req, res)=>{
     Resident.find()
     .populate('leases')
     .exec()
@@ -33,8 +35,6 @@ router.get('/:id', jsonParser, (req, res) =>{
 });
 
 router.post('/', jsonParser, (req, res) =>{
-    // const {firstName, lastName, emailAddress, 
-    // dateOfBirth, phoneNumber, password,notes,username} = req.body;
     
     const requiredFields = ['username', 'password','firstName','lastName',
     'emailAddress'];
@@ -110,69 +110,68 @@ router.post('/', jsonParser, (req, res) =>{
       location: tooSmallField || tooLargeField
     });
     }
+    
     let {firstName, lastName, emailAddress, 
     dateOfBirth, phoneNumber, password,notes,username} = req.body;
-  // Username and password come in pre-trimmed, otherwise we throw an error
-  // before this
+ 
   firstName = firstName.trim();
   lastName = lastName.trim();
-  console.log(username);
 
-  return User.find({username})
+  return User
+    .find({username})
     .count()
     .then(count => {
       if (count > 0) {
-        // There is an existing user with the same username
-        return Promise.reject({
-          code: 422,
-          reason: 'ValidationError',
-          message: 'Username already taken',
-          location: 'username'
-        });
+          return Promise.reject({
+           code: 422,
+           reason: 'ValidationError',
+           message: 'username already taken',
+           location: 'username'
+           });
       }
-      // If there is no existing user, hash the password
-      //return User.hashPassword(password);
     })
-    .then(
-        User.find({emailAddress})
-        .count()
-        .then(count =>{
-            if(count >0){
-               return res.status(422).json({
-                       code:    422,
-                       reason: 'ValidationError',
-                       message: 'Email already taken. If this is your account, lease log in',
-                       location: 'emailAddress'
-                   });
-               
-        //       Promise.reject({
-        //   code: 422,
-        //   reason: 'ValidationError',
-        //   message: 'Email already taken. If this is your account, lease log in',
-        //   location: 'emailAddress'
-            }
-        })
+    .then(() => {
+          return User
+              .find({emailAddress})
+              .count();
+        }
     )
-    .then(
-   User
-   .create({
-       _id: new mongoose.Types.ObjectId(),
-       username,
-       firstName, 
-       lastName, 
-       emailAddress, 
-       dateOfBirth, 
-       phoneNumber, 
-       password,
-       notes,
-       role: 'Resident'
-   })
-   .then(resident =>{
-       res
-        .status(201)
-        .json(resident);
-   })
-   );
+      .then(count => {
+        if (count > 0) {
+          return Promise.reject({
+            code: 422,
+            reason: 'ValidationError',
+            message: 'Email already taken. If this is your account, please log in',
+            location: 'emailAddress'
+          });
+        }
+        return User.hashPassword(password);
+      })
+    .then( hash => {
+          return User.create({
+            username,
+            password: hash,
+            emailAddress,
+            firstName,
+            role: 'Resident',
+            lastName,
+            dateOfBirth,
+            phoneNumber,
+            notes
+          });
+        }
+    )
+    .then(user => {
+      return res.status(201).json(user.serialize());
+    })
+    .catch(err => {
+      if (err.reason === 'ValidationError') {
+        return res.status(err.code).json(err);
+      }
+      console.log(err);
+      res.status(500).json({code: 500, message: 'Internal server error'});
+    });
 });
 
 module.exports = router;
+
