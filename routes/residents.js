@@ -1,3 +1,4 @@
+'use strict';
 const express = require('express');
 const router = express.Router();
 const bodyParser = require('body-parser');
@@ -7,7 +8,7 @@ const mongoose = require('mongoose');
 const {User, Resident} = require('../models/users');
 const Unit = require('../models/units');
 const Lease = require('../models/leases');
-const permit = require("../permissions")
+const permit = require("../permissions");
 const jwtAuth = passport.authenticate('jwt', {session: false});
 
 
@@ -22,9 +23,9 @@ router.get('/',jwtAuth, permit('Owner'), (req, res)=>{
     });
 });
 
-router.get('/:id', jsonParser, (req, res) =>{
+router.get('/:id', jsonParser, jwtAuth, permit('Owner'), (req, res) =>{
     Resident
-    .findById(req.params.resident_id)
+    .findById(req.params.id)
     .populate('leases')
     .exec()
     .then(resident => {
@@ -34,7 +35,7 @@ router.get('/:id', jsonParser, (req, res) =>{
     });
 });
 
-router.post('/', jsonParser, (req, res) =>{
+router.post('/', jsonParser, jwtAuth, permit('Owner'), (req, res) =>{
     
     const requiredFields = ['username', 'password','firstName','lastName',
     'emailAddress'];
@@ -171,6 +172,35 @@ router.post('/', jsonParser, (req, res) =>{
       console.log(err);
       res.status(500).json({code: 500, message: 'Internal server error'});
     });
+});
+
+router.post('/:resident_id/lease', jsonParser,jwtAuth,permit('Owner'), (req, res) => {
+  //skip validation
+  const { unitNumber, leaseStartDate, leaseEndDate, monthlyRent, securityDeposits, petDeposit, unit_id} = req.body;
+  Resident
+      .findById(req.params.resident_id)
+      .then(resident => {
+        return Lease
+            .create({
+              unitNumber,
+              leaseStartDate,
+              leaseEndDate,
+              monthlyRent,
+              securityDeposits,
+              petDeposit,
+              unit: unit_id,
+              resident: resident._id
+            })
+            .then(lease => {
+              resident.leases.push(lease);
+              return resident.save();
+            });
+      })
+      .then(resident => {
+        res
+            .status(201)
+            .json(resident);
+      });
 });
 
 module.exports = router;

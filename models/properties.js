@@ -4,13 +4,13 @@ const mongoose = require('mongoose');
 const propertySchema = mongoose.Schema({
 
   name: {type: String, required: true},
-  _id:  mongoose.Schema.Types.ObjectId,
   address: {
     street: String,
     City:   String,
     State:  String,
     zipcode: String
   },
+  user: {type: mongoose.Schema.Types.ObjectId, ref: 'user'},
   units: [{type: mongoose.Schema.Types.ObjectId, ref: 'unit'}]
 });
     

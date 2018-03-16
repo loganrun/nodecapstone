@@ -3,7 +3,7 @@ const mongoose = require('mongoose');
 
 const leaseSchema = mongoose.Schema({
 
-  unitNo:   {type: String, required:  true},
+  unitNumber:   {type: String, required:  true},
   leaseStartDate: {type:  String, required: true},
   leaseEndDate: {type: String, required: true},
   monthlyRent:  {type: String, required: true},

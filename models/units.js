@@ -1,12 +1,11 @@
 const mongoose = require('mongoose');
 
 const unitSchema = mongoose.Schema({
-  unitNumber: {type: String, required: true, default: ''},
-  _id:  mongoose.Schema.Types.ObjectId,
+  unitNumber: {type: Number, required: true, default: ''},
   area: {type: Number, default: 1},
   bedroom: {type: Number, default: 1},
   bathroom: {type: Number, default: 1},
-  garage: {type: Number, default: 0},
+  garage: {type: String, default: ''},
   notes: {type: String, default: ''},
   property: {type: mongoose.Schema.Types.ObjectId, ref: 'property'}
 });

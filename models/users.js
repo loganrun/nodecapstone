@@ -35,7 +35,8 @@ UserSchema.methods.serialize = function(){
         username:   this.username || '',
         firstName:  this.firstName || '',
         lastName:   this.lastName || '',
-        role:       this.role ||''
+        role:       this.role ||'',
+        _id:        this._id || ''
     
     };
 };
@@ -51,7 +52,7 @@ UserSchema.statics.hashPassword = function(password) {
 const User = mongoose.model('User', UserSchema);
 
 const Owner = User.discriminator('Owner', mongoose.Schema({
-     _id: mongoose.Schema.Types.ObjectId,
+    // _id: mongoose.Schema.Types.ObjectId,
     properties: [{type: mongoose.Schema.Types.ObjectId, ref: 'property'}]
 }, options));
 

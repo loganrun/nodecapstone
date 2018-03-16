@@ -1,3 +1,4 @@
+'use strict';
 const express = require('express');
 const router = express.Router();
 const bodyParser = require('body-parser');
@@ -5,9 +6,12 @@ const mongoose = require('mongoose');
 const jsonParser = bodyParser.json();
 const Property = require('../models/properties');
 const Unit = require('../models/units');
+const passport = require('passport');
+const permit = require("../permissions");
+const jwtAuth = passport.authenticate('jwt', {session: false});
 
 
-router.get('/', (req, res) => {
+router.get('/',jsonParser,jwtAuth, permit('Owner'), (req, res) => {
   Property
       .find()
       .populate('units')
@@ -20,15 +24,15 @@ router.get('/', (req, res) => {
 });
 
 
-router.post('/', jsonParser, (req, res) => {
+router.post('/', jsonParser, jwtAuth,permit('Owner'), (req, res) => {
   //skipping validation
-  const { name, address } = req.body;
+  const { name, address} = req.body;
 
   Property
       .create({
         name,
         address,
-        _id: new mongoose.Types.ObjectId,
+        user: req.user._id
       })
       .then(property => {
         res
@@ -37,14 +41,15 @@ router.post('/', jsonParser, (req, res) => {
       });
 });
 
-router.post('/:property_id/unit', jsonParser, (req, res) => {
+router.post('/:property_id/unit', jsonParser,jwtAuth,permit('Owner'), (req, res) => {
   //skip validation
-  const { area, bedroom, bathroom, garage, notes } = req.body;
+  const { area, bedroom, bathroom, garage, notes, unitNumber} = req.body;
   Property
       .findById(req.params.property_id)
       .then(property => {
         return Unit
             .create({
+              unitNumber,
               area,
               bedroom,
               bathroom,
