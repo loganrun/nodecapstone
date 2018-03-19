@@ -175,7 +175,31 @@ router.post('/', jsonParser, jwtAuth, permit('Owner'), (req, res) =>{
 });
 
 router.post('/:resident_id/lease', jsonParser,jwtAuth,permit('Owner'), (req, res) => {
-  //skip validation
+  const requiredFields = ['unitNumber', 'leaseStartDate', 'leaseEndDate', 'monthlyRent', 'securityDeposits', 'petDeposit', 'unit_id'];
+    const missingField = requiredFields.find(field => !(field in req.body));
+    
+    if (missingField) {
+    return res.status(422).json({
+      code: 422,
+      reason: 'ValidationError',
+      message: 'Missing field',
+      location: missingField
+    });
+    }
+    
+    const stringFields =  ['unitNumber', 'leaseStartDate', 'leaseEndDate', 'monthlyRent', 'securityDeposits', 'petDeposit', 'unit_id'];
+    const nonStringField = stringFields.find(
+    field => field in req.body && typeof req.body[field] !== 'string'
+    );
+
+    if (nonStringField) {
+    return res.status(422).json({
+      code: 422,
+      reason: 'ValidationError',
+      message: 'Incorrect field type: expected string',
+      location: nonStringField
+    });
+    }
   const { unitNumber, leaseStartDate, leaseEndDate, monthlyRent, securityDeposits, petDeposit, unit_id} = req.body;
   Resident
       .findById(req.params.resident_id)
