@@ -111,7 +111,7 @@ h1 {
 
 .split.left {
   left:0;
-  background: url('livingroom.jpeg') center center no-repeat;
+  background: url('../images/livingroom.jpeg') center center no-repeat;
   background-size: cover;
 }
 
@@ -126,7 +126,7 @@ h1 {
 
 .split.right {
   right:0;
-  background: url('aptbuilding.jpeg') center center no-repeat;
+  background: url('../images/aptbuilding.jpeg') center center no-repeat;
   background-size: cover;
 }
 

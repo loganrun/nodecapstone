@@ -13,7 +13,7 @@ const jwtAuth = passport.authenticate('jwt', {session: false});
 
 router.get('/',jsonParser,jwtAuth, permit('Owner'), (req, res) => {
   Property
-      .find()
+      .find({user:req.user._id})
       .populate('units')
       .exec()
       .then(properties => {
