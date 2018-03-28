@@ -26,12 +26,17 @@ router.get('/',jsonParser,jwtAuth, permit('Owner'), (req, res) => {
 
 router.post('/', jsonParser, jwtAuth,permit('Owner'), (req, res) => {
   //skipping validation
-  const { name, address} = req.body;
+  const { name, street,city, state, zipcode} = req.body;
 
   Property
       .create({
         name,
-        address,
+        address:{
+          street: street,
+          City: city,
+          State: state,
+          zipcode: zipcode
+        },
         user: req.user._id
       })
       .then(property => {

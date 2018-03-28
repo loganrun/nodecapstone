@@ -49,6 +49,7 @@ $(document).ready(() => {
     //     console.log(image);
     //     renderArticles(author, desc, title, link, image);
     //   });
+    window.location = '/ownlog.html';
     });
   }
   

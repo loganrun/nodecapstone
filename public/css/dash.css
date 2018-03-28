@@ -12,7 +12,8 @@ html, body {
   background-color: #EBECF1;
 }
 
-.sidemenu {
+
+aside .sidemenu {
     background: #F96332;
     position: fixed,
     display: block;
@@ -101,3 +102,4 @@ html, body {
         width: calc(100% -260px);
         background: linear-gradient(90deg, #0c2646 0, #204065 60%, #2a5788);
     }
+    
