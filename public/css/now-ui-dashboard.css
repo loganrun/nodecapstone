@@ -2311,6 +2311,7 @@ Created using IcoMoon - icomoon.io
               box-shadow: 0 1px 15px 1px rgba(39, 39, 39, 0.1); }
     .sidebar .nav p,
     .off-canvas-sidebar .nav p {
+      font-size: .8rem;
       margin: 0;
       line-height: 30px;
       position: relative;
@@ -2512,11 +2513,13 @@ Created using IcoMoon - icomoon.io
   
 
 @media (min-width: 991px) {
-  .col-lg-4 {
-    flex: 0 0 25%;
-    max-width: 25%
-  }
   
+  .propertyCard{
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr 1fr;
+    margin: 0 auto;
+    grid-gap: 5px;
+  }
   .sidebar {
     display: block;
     -webkit-box-shadow: 0px 2px 22px 0 rgba(0, 0, 0, 0.2), 0px 2px 30px 0 rgba(0, 0, 0, 0.35);
@@ -2545,18 +2548,13 @@ Created using IcoMoon - icomoon.io
         z-index: 1000000000;
         }
     .modal-content{
-       /* position: absolute;*/
        text-align: center;
-       /* margin-left:50%;*/
-	      /*margin-top:30%;*/
-	      /*margin-right:25%;*/
-	      /*border-radius:5px;*/
 	      background-color:#f4f4f4;
-        margin: 20% auto;
+        /*margin: 20% auto;*/
+        margin-left: 30%;
+        margin-top: 10%;
         width:40%;
         box-shadow: 0 5px 8px 0 rgba(0,0,0,0.2),0 7px 20px 0 rgba(0,0,0,0.17);
-        /*animation-name:modalopen;*/
-        /*animation-duration:1s;*/
         }
         .modal-header h2, .modal-footer h3{
         margin:0;
@@ -2567,6 +2565,11 @@ Created using IcoMoon - icomoon.io
         padding:15px;
         color:#fff;
         }
+        
+      .modal-footer{
+        background-color: #f4f4f4;
+        padding: 15px;
+      }
 
     .propAdd{
           width: calc(100% - 30px);
@@ -2594,13 +2597,7 @@ Created using IcoMoon - icomoon.io
     #pID{
       display: none;
     }
-    /*.show-modal {*/
-    /*    opacity: 1;*/
-    /*    visibility: visible;*/
-    /*    transform: scaleX(1.0) scaleY(1.0);*/
-    /*    transition: visibility 0s linear 0s, opacity 0.25s 0s, transform 0.25s;*/
-    /*}*/
-  
+    
     .submitProp {
       overflow: visible;
       position: relative;

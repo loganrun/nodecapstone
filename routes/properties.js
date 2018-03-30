@@ -64,14 +64,13 @@ router.post('/:property_id/unit', jsonParser,jwtAuth,permit('Owner'), (req, res)
             })
             .then(unit => {
               property.units.push(unit);
-              return property.save();
+             return property.save().then(()=>{
+               res.status(201)
+              .json(unit);
+             });
             });
-      })
-      .then(property => {
-        res
-            .status(201)
-            .json(property);
       });
+      
 });
 
 

@@ -38,17 +38,6 @@ $(document).ready(() => {
 
     }).done(function(response){
       console.log(response);
-      //let info = response.articles;
-
-    //   $.each(info, (index, item)=>{
-    //     let author = item.author;
-    //     let desc = item.description;
-    //     let title = item.title;
-    //     let link = item.url;
-    //     let image = item.urlToImage;
-    //     console.log(image);
-    //     renderArticles(author, desc, title, link, image);
-    //   });
     window.location = '/ownlog.html';
     });
   }
@@ -67,17 +56,6 @@ $(document).ready(() => {
 
     }).done(function(response){
       console.log(response);
-      //let info = response.articles;
-
-    //   $.each(info, (index, item)=>{
-    //     let author = item.author;
-    //     let desc = item.description;
-    //     let title = item.title;
-    //     let link = item.url;
-    //     let image = item.urlToImage;
-    //     console.log(image);
-    //     renderArticles(author, desc, title, link, image);
-    //   });
     window.localStorage.setItem('token', response.authToken);
     window.location = '/dashboard.html';
     });
