@@ -4,6 +4,7 @@ $(function(){
    let token = window.localStorage.getItem('token');
   if(!token){
       //.append(not logged in)
+      
   // GET LIST OF CURRENT PROPERTIES     
   }else{
       $.ajax({
@@ -16,11 +17,11 @@ $(function(){
       }
      
     }).done(function(response){
-      console.log(response);
+      //console.log(response);
       let currentProperties = response;
       properties.push(...currentProperties);
       console.log(properties);
-      displayProperties(currentProperties);
+      displayProperties(properties);
     });
        
   }
@@ -84,16 +85,40 @@ $(function(){
       //console.log(response);
       let newProperties = response;
       properties.push(newProperties);
-      console.log(newProperties);
+      //console.log(newProperties);
       displayProperties(properties);
     });
     }
     
-   //Add Units 
+    //REMOVE PROPERTIES
+    
+    $('.propertyCard').on('click',"#delete-property", (e) =>{
+     $('.propertyForm').append(`
+    <div class="modal">
+        <div class="modal-content" >
+        <div class="modal-header-warning">
+          <span class="closeBtn">&times;</span>
+          <h2>Delete Property?</h2>
+        </div>
+        <div>
+            <form id="removePropertiesForm">
+            <p> Warning!!! You are about to delete this property and all of its units. 
+            If you wish to proceed, click continue.  Otherwise, click the X to close this window.</p>
+                
+                <br></br>
+                <button class="submitProp-warning" id="continueDelete"type="click">CONTINUE</button>
+            </form>
+        </div>
+        <div class="modal-footer"></div>
+    </div>
+    `);
+    });
+    
+   //ADD UNITS
    
     $('.propertyCard').on('click',"#unit-add", (e) =>{
         let propID = $(e.currentTarget).data("propid");
-        console.log(propID);
+        //console.log(propID);
      $('.propertyForm').append(`
     <div class="modal">
         <div class="modal-content" >
@@ -109,7 +134,7 @@ $(function(){
                 <input class="propAdd" id="bathroom" placeholder="How many bathrooms" type="text" value="" name="" aria-required="true" required>
                 <input class="propAdd" id="garage" placeholder="Avaiable parking spaces" type="text" value="" name="">
                 <input class="propAdd" id="notes" placeholder="Additional info" type="text" value="" name="">
-                <input id="pID" placeholder="" type="text" value="${propID}" name="">
+                
                 
                 <br></br>
                 <button class="submitProp"type="submit">SUBMIT</button>
@@ -162,6 +187,18 @@ $(function(){
         displayProperties(properties);
     });
     }
+    
+    //VIEW UNITS
+    
+     $('.propertyCard').on('click',"#view-unit", (e) =>{
+        let propId = $(e.currentTarget).data("propid");
+        console.log(propId);
+        let currentUnit = properties.find(prop =>{
+             return properties.property_id == propId;
+         });
+         console.log(currentUnit);
+        // //displayUnits(currentUnit);
+     });
 
 
    
@@ -176,7 +213,7 @@ $(function(){
           <h2>New Lease</h2>
         </div>
         <div>
-            <form id="addUnitForm">
+            <form id="introForm">
             <h6>Welcome to the new Lease form</h6>
             <p> Creating a new lease is a two step process.  
             First, you have to set up an account for your resident.  This allows you 
@@ -285,7 +322,7 @@ $(function(){
     function displayProperties(properties){
         $('.propertyCard').empty();
          $.each(properties, (index, item)=>{
-             console.log("display", item);
+            // console.log("display", item);
         let name = item.name;
         let street = item.address.street;
         let city = item.address.City;
@@ -293,7 +330,23 @@ $(function(){
         let zipcode = item.address.zipcode;
         let propId = item._id;
         let units = item.units;
-        console.log(name, street,city,state,zipcode, propId, units);
+        //console.log(name, street,city,state,zipcode, propId, units);
+        renderPorperties(name, street, city, state, zipcode,propId, units);
+      });
+    }
+    
+    function displayUnits(currentUnit){
+        $('.propertyCard').empty();
+         $.each(currentUnit, (index, item)=>{
+            // console.log("display", item);
+        let name = item.name;
+        let street = item.address.street;
+        let city = item.address.City;
+        let state = item.address.State;
+        let zipcode = item.address.zipcode;
+        let propId = item._id;
+        let units = item.units;
+        //console.log(name, street,city,state,zipcode, propId, units);
         renderPorperties(name, street, city, state, zipcode,propId, units);
       });
     }
@@ -319,6 +372,7 @@ $(function(){
                                 <div class="add-info">
                                     <button class="submitInfo" id="view-unit" type="click" data-propid = "${propId}">View Units</button>
                                     <button class="submitInfo" id="unit-add" type="click" data-propid = "${propId}">Add Units</button>
+                                    <button class="submitInfo" id="delete-property" type="click" data-propid = "${propId}">DELETE</button>
                                 </div>
                             </div>
                         </div>`);
@@ -330,3 +384,4 @@ $(function(){
 // <button class="submitInfo" id="lease-add" type="click">Add Leases</button>
 // $('.propertyCard').empty();
 //.find('propid').val();//$('#propid').val(); //(this).closest(".card-body").find("#propid").val()
+// <input id="pID" placeholder="" type="text" value="${propID}" name="">

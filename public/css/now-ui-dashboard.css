@@ -2565,6 +2565,10 @@ Created using IcoMoon - icomoon.io
         padding:15px;
         color:#fff;
         }
+        .modal-header-warning{
+          background: #FF1000;
+          color:#fff;
+        }
         
       .modal-footer{
         background-color: #f4f4f4;
@@ -2610,6 +2614,24 @@ Created using IcoMoon - icomoon.io
       color: #fff;
       text-transform: uppercase;
       background: #F96332;
+      -moz-border-radius: 0 3px 3px 0;
+      -webkit-border-radius: 0 3px 3px 0;
+      border-radius: 0 3px 3px 0;
+      text-shadow: 0 -1px 0 rgba(0, 0, 0, .3);
+    }
+    
+    .submitProp-warning {
+      overflow: visible;
+      position: relative;
+      border: 0;
+      padding: 0;
+      cursor: pointer;
+      height: 40px;
+      width: 110px;
+      font: bold 15px/40px 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+      color: #fff;
+      text-transform: uppercase;
+      background: #FF1000;
       -moz-border-radius: 0 3px 3px 0;
       -webkit-border-radius: 0 3px 3px 0;
       border-radius: 0 3px 3px 0;

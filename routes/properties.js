@@ -73,5 +73,14 @@ router.post('/:property_id/unit', jsonParser,jwtAuth,permit('Owner'), (req, res)
       
 });
 
+router.delete('/:property_id/delete', jsonParser, jwtAuth,permit('Owner'), (req, res) => {
+  Property.findByIdAndRemove(req.params.property_id)
+      .then(property => {
+        res
+            .status(201)
+            .json(property);
+      });
+});
+
 
 module.exports = router;
