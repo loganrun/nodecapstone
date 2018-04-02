@@ -1,6 +1,6 @@
 'use strict';
 $(function(){
-    let properties = [];
+   let properties = [];
    let token = window.localStorage.getItem('token');
   if(!token){
       //.append(not logged in)
@@ -59,7 +59,6 @@ $(function(){
         let state = $('#state').val();
         let zipcode = $('#zipcode').val();
         e.preventDefault();
-        //console.log(name,street, city,state, zipcode);
         propertyAddition(name,street, city,state,zipcode);
          $('.propertyForm').empty();
     });
@@ -82,10 +81,8 @@ $(function(){
       })
      
     }).done(function(response){
-      //console.log(response);
       let newProperties = response;
       properties.push(newProperties);
-      //console.log(newProperties);
       displayProperties(properties);
     });
     }
@@ -93,6 +90,8 @@ $(function(){
     //REMOVE PROPERTIES
     
     $('.propertyCard').on('click',"#delete-property", (e) =>{
+        let propID = $(e.currentTarget).data("propid");
+        //console.log(propID);
      $('.propertyForm').append(`
     <div class="modal">
         <div class="modal-content" >
@@ -104,9 +103,10 @@ $(function(){
             <form id="removePropertiesForm">
             <p> Warning!!! You are about to delete this property and all of its units. 
             If you wish to proceed, click continue.  Otherwise, click the X to close this window.</p>
+            <input id="pID" placeholder="" type="text" value="${propID}" name="">
                 
                 <br></br>
-                <button class="submitProp-warning" id="continueDelete"type="click">CONTINUE</button>
+                <button class="submitProp-warning" id="continueDelete"type="submit">CONTINUE</button>
             </form>
         </div>
         <div class="modal-footer"></div>
@@ -114,11 +114,37 @@ $(function(){
     `);
     });
     
+    $('.propertyForm').on('submit','#removePropertiesForm', (e) =>{
+        let property_id = $('#pID').val();
+        console.log(property_id);
+        propertyRemove(property_id);
+        $('.propertyForm').empty();
+         e.preventDefault();
+    });
+    
+    function propertyRemove(property_id){
+     $.ajax({
+      method: 'DELETE',
+      contentType: 'application/json',
+      processData: false,
+      url: 'https://thinkfulnode-loganrun.c9users.io/api/properties/'+property_id+'/delete',
+      headers: {
+        Authorization: 'Bearer ' +token
+       },
+     }).done(function(response){
+       let removedProperties = response;
+       console.log(removedProperties._id);
+       properties = properties.filter(property =>{
+           return property._id !==  removedProperties._id;
+       });
+      displayProperties(properties);
+     });
+    }
+    
    //ADD UNITS
    
     $('.propertyCard').on('click',"#unit-add", (e) =>{
         let propID = $(e.currentTarget).data("propid");
-        //console.log(propID);
      $('.propertyForm').append(`
     <div class="modal">
         <div class="modal-content" >
@@ -134,6 +160,7 @@ $(function(){
                 <input class="propAdd" id="bathroom" placeholder="How many bathrooms" type="text" value="" name="" aria-required="true" required>
                 <input class="propAdd" id="garage" placeholder="Avaiable parking spaces" type="text" value="" name="">
                 <input class="propAdd" id="notes" placeholder="Additional info" type="text" value="" name="">
+                <input id="pID" placeholder="" type="text" value="${propID}" name="">
                 
                 
                 <br></br>
@@ -154,7 +181,6 @@ $(function(){
         let notes = $('#notes').val();
         let property_id =$('#pID').val();
         e.preventDefault();
-        //console.log(unitNumber,area, bathroom,bedroom, garage, notes, property_id);
         unitAddition(property_id,unitNumber,area, bedroom,bathroom,garage, notes);
         $('.propertyForm').empty();
     });
@@ -178,7 +204,7 @@ $(function(){
       })
      
     }).done(function(response){
-      //console.log(response);
+      console.log(response);
       let newUnit = response;
       let property = properties.find(prop =>{
           return prop._id == property_id;
@@ -192,13 +218,23 @@ $(function(){
     
      $('.propertyCard').on('click',"#view-unit", (e) =>{
         let propId = $(e.currentTarget).data("propid");
-        console.log(propId);
-        let currentUnit = properties.find(prop =>{
-             return properties.property_id == propId;
+        // let continueView = properties.find()
+        let currentUnit = properties.find(property =>{
+             return property._id == propId;
          });
-         console.log(currentUnit);
-        // //displayUnits(currentUnit);
+         console.log(currentUnit.units.length);
+         let unitInfo = currentUnit.units.filter(unit =>{
+             return unit;
+         });
+         //console.log(unitInfo);
+        displayUnits(currentUnit, unitInfo);
      });
+     
+     $('.propertyCard').on('click',"#returnToProperties", (e) =>{
+        displayProperties(properties); 
+     });
+     
+     
 
 
    
@@ -322,7 +358,6 @@ $(function(){
     function displayProperties(properties){
         $('.propertyCard').empty();
          $.each(properties, (index, item)=>{
-            // console.log("display", item);
         let name = item.name;
         let street = item.address.street;
         let city = item.address.City;
@@ -330,26 +365,25 @@ $(function(){
         let zipcode = item.address.zipcode;
         let propId = item._id;
         let units = item.units;
-        //console.log(name, street,city,state,zipcode, propId, units);
         renderPorperties(name, street, city, state, zipcode,propId, units);
       });
     }
     
-    function displayUnits(currentUnit){
+    function displayUnits(currentUnit, unitInfo){
         $('.propertyCard').empty();
-         $.each(currentUnit, (index, item)=>{
-            // console.log("display", item);
-        let name = item.name;
-        let street = item.address.street;
-        let city = item.address.City;
-        let state = item.address.State;
-        let zipcode = item.address.zipcode;
-        let propId = item._id;
-        let units = item.units;
-        //console.log(name, street,city,state,zipcode, propId, units);
-        renderPorperties(name, street, city, state, zipcode,propId, units);
+        let name = currentUnit.name;
+        $.each(unitInfo, (index, item)=>{
+        let unitNumber = item.unitNumber;
+        let bedroom = item.bedroom;
+        let bathroom = item.bathroom;
+        let garage = item.garage;
+        let unitId = item._id;
+       renderUnits(name, unitNumber, bedroom, bathroom, garage,unitId);
       });
     }
+    
+    
+    
     
     
     //RENDER FUNCTION
@@ -365,7 +399,7 @@ $(function(){
                                 <h6>${city}</h6>
                                 <h6>${state}</h6>
                                 <h6>${zipcode}</h6>
-                                <h6>units-${units.length}</h6>
+                                <h6 id="unitsNum" data-units = ${units.length}>units-${units.length}</h6>
                                 <input id="propid" placeholder="" type="text" value="${propId}">
                             </div>
                             <div class="card-footer">
@@ -373,6 +407,28 @@ $(function(){
                                     <button class="submitInfo" id="view-unit" type="click" data-propid = "${propId}">View Units</button>
                                     <button class="submitInfo" id="unit-add" type="click" data-propid = "${propId}">Add Units</button>
                                     <button class="submitInfo" id="delete-property" type="click" data-propid = "${propId}">DELETE</button>
+                                </div>
+                            </div>
+                        </div>`);
+  }
+  
+  function renderUnits(name, unitNumber, bedroom, bathroom, garage,unitId){
+      $('.propertyCard').append(`<div class="card card-chart">
+                            <div class="image">
+                                <img src="./images/aptthumb.jpeg"></img>
+                            </div>
+                            <div class="card-body">
+                                <h2>${name}</h2>
+                                <h6>Apt# ${unitNumber}</h6>
+                                <h6>Bedrooms: ${bedroom}</h6>
+                                <h6>Bathrooms: ${bathroom}</h6>
+                                <h6>Parking: ${garage}</h6>
+                                <input id="propid" placeholder="" type="text" value="${unitId}">
+                            </div>
+                            <div class="card-footer">
+                                <div class="add-info">
+                                    <button class="submitInfo" id="returnToProperties" type="click" data-propid = "${unitId}">View Properties</button>
+                                    <button class="submitInfo" id="delete-unit" type="click" data-propid = "${unitId}">DELETE</button>
                                 </div>
                             </div>
                         </div>`);
