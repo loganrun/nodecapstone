@@ -26,8 +26,14 @@ $(function(){
   }
   
   $('.navbar-wrapper').on('click','#menu-button',(e) =>{
-      $('#menu-button').toggle
-  }) 
+      e.preventDefault();
+          $('.sidebar').toggleClass('slide');
+  }); 
+  
+  $('.sidebar').on('click', '.close', (e)=>{
+     e.preventDefault() ;
+     $('.sidebar').toggleClass('slide');
+  });
     //ADD PROPERTIES
     
   $('.navbar').on('click','#add-property', (e) =>{
