@@ -25,9 +25,32 @@ router.get('/',jsonParser,jwtAuth, permit('Owner'), (req, res) => {
 
 
 router.post('/', jsonParser, jwtAuth,permit('Owner'), (req, res) => {
-  //skipping validation
+  const requiredFields = ['name', 'street','city','state','zipcode'];
+  const missingField = requiredFields.find(field => !(field in req.body));
+  if (missingField) {
+    return res.status(422).json({
+      code: 422,
+      reason: 'ValidationError',
+      message: 'Missing field',
+      location: missingField
+    });
+    }
+  
+  const stringFields = ['name', 'street', 'city', 'state','zipcode'];
+    const nonStringField = stringFields.find(
+    field => field in req.body && typeof req.body[field] !== 'string'
+    );
+    
+  if (nonStringField) {
+    return res.status(422).json({
+      code: 422,
+      reason: 'ValidationError',
+      message: 'Incorrect field type: expected string',
+      location: nonStringField
+    });
+    }  
+  
   const { name, street,city, state, zipcode} = req.body;
-
   Property
       .create({
         name,
@@ -73,13 +96,31 @@ router.post('/:property_id/unit', jsonParser,jwtAuth,permit('Owner'), (req, res)
       
 });
 
-router.delete('/:property_id/delete', jsonParser, jwtAuth,permit('Owner'), (req, res) => {
+router.delete('/:property_id', jsonParser, jwtAuth,permit('Owner'), (req, res) => {
   Property.findByIdAndRemove(req.params.property_id)
       .then(property => {
         res
             .status(201)
             .json(property);
       });
+});
+
+router.delete('/:property_id/:units_id', jsonParser, jwtAuth,permit('Owner'), (req, res) => {
+  console.log(req.params);
+  Property.findById(req.params.property_id).populate('units')
+      .then(property => {
+        let removeUnits=property.units.findIndex(item => {
+          return item._id == req.params.units_id;
+        });
+        property.units.splice(removeUnits, 1);
+        return property.save();
+      })
+      .then(property => {
+        res
+            .status(201)
+            .json(property);
+      });
+      
 });
 
 
