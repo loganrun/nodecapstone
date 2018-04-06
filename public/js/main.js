@@ -7,7 +7,7 @@ $(document).ready(() => {
         let lastName = $('#lastName').val();
         let emailAddress = $('#emailAddress').val();
         e.preventDefault();
-        console.log(passWord,username, firstName,lastName,emailAddress);
+        //console.log(passWord,username, firstName,lastName,emailAddress);
        signUp(passWord,username, firstName,lastName,emailAddress);
         
     });
@@ -16,13 +16,13 @@ $(document).ready(() => {
         let passWord = $('#passWord').val();
         let username = $('#username').val();
         e.preventDefault();
-        console.log(passWord, username);
+        //console.log(passWord, username);
        logIn(passWord,username);
         
     });
     
     function signUp(passWord, username,firstName,lastName, emailAddress){
-        console.log(passWord,username, firstName,lastName,emailAddress);
+        //console.log(passWord,username, firstName,lastName,emailAddress);
     $.ajax({
       method: 'POST',
       contentType: 'application/json',

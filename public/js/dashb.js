@@ -3,7 +3,7 @@ $(function(){
    let properties = [];
    let token = window.localStorage.getItem('token');
   if(!token){
-      //.append(not logged in)
+      window.location = 'ownlog.html';
       
   // GET LIST OF CURRENT PROPERTIES     
   }else{
@@ -20,10 +20,14 @@ $(function(){
       let currentProperties = response;
       properties.push(...currentProperties);
       displayProperties(properties);
+      
     });
        
   }
-    
+  
+  $('.navbar-wrapper').on('click','#menu-button',(e) =>{
+      $('#menu-button').toggle
+  }) 
     //ADD PROPERTIES
     
   $('.navbar').on('click','#add-property', (e) =>{
@@ -506,6 +510,11 @@ $(function(){
     
     
     //RENDER FUNCTION
+    
+    function renderPropertiesNew(){
+        $('.panel-header').append(`<h2>WELCOME! CLICK THE BUTTON TO ADD YOUR FIRST PROPERTY</h2>`);
+        
+    }
     
     function renderPorperties(name, street, city, state, zipcode,propId, units){
     
