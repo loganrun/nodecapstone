@@ -245,6 +245,7 @@ $(function(){
       let property = properties.find(prop =>{
           return prop._id == property_id;
       });
+      
         property.units.push(newUnit);
         displayProperties(properties);
     });

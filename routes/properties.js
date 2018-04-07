@@ -70,7 +70,27 @@ router.post('/', jsonParser, jwtAuth,permit('Owner'), (req, res) => {
 });
 
 router.post('/:property_id/unit', jsonParser,jwtAuth,permit('Owner'), (req, res) => {
-  //skip validation
+  const requiredFields = ['area', 'bedroom', 'bathroom', 'garage', 'unitNumber'];
+  const missingField = requiredFields.find(field => !(field in req.body));
+  if (missingField) {
+    return res.status(422).json({
+      code: 422,
+      reason: 'ValidationError',
+      message: 'Please fill in the required field',
+      location: missingField
+    });
+    }
+  
+  const numFields = req.body['bathroom', 'bedroom'];
+    const numField = numFields.match(/(^[0-9])/);
+  if (!numField) {
+    return res.status(422).json({
+      code: 422,
+      reason: 'ValidationError',
+      message: 'Please submit number for bed and bath',
+      location: numField
+    });
+    }  
   const { area, bedroom, bathroom, garage, notes, unitNumber} = req.body;
   Property
       .findById(req.params.property_id)
