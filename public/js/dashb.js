@@ -361,113 +361,113 @@ $(function(){
 
 
    
-   //ADD RESIDENTS/LEASES
+   //ADD RESIDENTS/LEASES- THIS CODE WILL BE LEFT FOR FUTURE DEVELOPEMENT 
   
-    $('.propertyCard').on('click',"#lease-add", (e) =>{
-     $('.propertyForm').append(`
-    <div class="modal">
-        <div class="modal-content" >
-        <div class="modal-header">
-          <span class="closeBtn">&times;</span>
-          <h2>New Lease</h2>
-        </div>
-        <div>
-            <form id="introForm">
-            <h6>Welcome to the new Lease form</h6>
-            <p> Creating a new lease is a two step process.  
-            First, you have to set up an account for your resident.  This allows you 
-            to begin receiving payment of rent electronically.  After creating the resident account, 
-            you will then be able to assign them to a unit and a lease.
-            It is not as bad as it sounds...so let's get started!!!</p>
+    // $('.propertyCard').on('click',"#lease-add", (e) =>{
+    //  $('.propertyForm').append(`
+    // <div class="modal">
+    //     <div class="modal-content" >
+    //     <div class="modal-header">
+    //       <span class="closeBtn">&times;</span>
+    //       <h2>New Lease</h2>
+    //     </div>
+    //     <div>
+    //         <form id="introForm">
+    //         <h6>Welcome to the new Lease form</h6>
+    //         <p> Creating a new lease is a two step process.  
+    //         First, you have to set up an account for your resident.  This allows you 
+    //         to begin receiving payment of rent electronically.  After creating the resident account, 
+    //         you will then be able to assign them to a unit and a lease.
+    //         It is not as bad as it sounds...so let's get started!!!</p>
                 
-                <br></br>
-                <button class="submitProp" id="continue"type="click">CONTINUE</button>
-            </form>
-        </div>
-        <div class="modal-footer"></div>
-    </div>
-    `);
-    });
+    //             <br></br>
+    //             <button class="submitProp" id="continue"type="click">CONTINUE</button>
+    //         </form>
+    //     </div>
+    //     <div class="modal-footer"></div>
+    // </div>
+    // `);
+    // });
     
-    $('.propertyForm').on('click',"#continue", (e) =>{
-         $('.propertyForm').empty();
-         e.preventDefault();
-     $('.propertyForm').append(`
-    <div class="modal">
-        <div class="modal-content" >
-        <div class="modal-header">
-          <span class="closeBtn">&times;</span>
-          <h2>New Resident</h2>
-        </div>
-        <div>
-            <form id="addResidentForm">
-                <input class="propAdd" id="username" placeholder="User Name - email address of tenant " type="text" value="" name="" aria-required="true" required>
-                <input class="propAdd" id="password" placeholder="initial password - first and last name of tenant, no spaces" type="text" value="" name="">
-                <input class="propAdd" id="firstName" placeholder="first name" type="text" value="" name="" aria-required="true" required>
-                <input class="propAdd" id="lastName" placeholder="last name" type="text" value="" name="" aria-required="true" required>
-                <input class="propAdd" id="emailAddress" placeholder="emailAddress" type="text" value="" name="">
-                <input class="propAdd" id="dateOfBirth" placeholder="Date of birth" type="text" value="" name="">
-                <input class="propAdd" id="phoneNumber" placeholder="phone number" type="text" value="" name="">
-                <input class="propAdd" id="notes" placeholder="Additional info" type="text" value="" name="">
-                <br></br>
-                <button class="submitProp"type="submit">SUBMIT</button>
-            </form>
-        </div>
-        <div class="modal-footer"></div>
-    </div>`);
-    });
+    // $('.propertyForm').on('click',"#continue", (e) =>{
+    //      $('.propertyForm').empty();
+    //      e.preventDefault();
+    //  $('.propertyForm').append(`
+    // <div class="modal">
+    //     <div class="modal-content" >
+    //     <div class="modal-header">
+    //       <span class="closeBtn">&times;</span>
+    //       <h2>New Resident</h2>
+    //     </div>
+    //     <div>
+    //         <form id="addResidentForm">
+    //             <input class="propAdd" id="username" placeholder="User Name - email address of tenant " type="text" value="" name="" aria-required="true" required>
+    //             <input class="propAdd" id="password" placeholder="initial password - first and last name of tenant, no spaces" type="text" value="" name="">
+    //             <input class="propAdd" id="firstName" placeholder="first name" type="text" value="" name="" aria-required="true" required>
+    //             <input class="propAdd" id="lastName" placeholder="last name" type="text" value="" name="" aria-required="true" required>
+    //             <input class="propAdd" id="emailAddress" placeholder="emailAddress" type="text" value="" name="">
+    //             <input class="propAdd" id="dateOfBirth" placeholder="Date of birth" type="text" value="" name="">
+    //             <input class="propAdd" id="phoneNumber" placeholder="phone number" type="text" value="" name="">
+    //             <input class="propAdd" id="notes" placeholder="Additional info" type="text" value="" name="">
+    //             <br></br>
+    //             <button class="submitProp"type="submit">SUBMIT</button>
+    //         </form>
+    //     </div>
+    //     <div class="modal-footer"></div>
+    // </div>`);
+    // });
     
-    $('.propertyForm').on('submit','#addResidentForm', (e) =>{
-        let username = $('#username').val();
-        let password = $('#password').val();
-        let firstName = $('#firstName').val();
-        let lastName = $('#lastName').val();
-        let emailAddress = $('#emailAddress').val();
-        let notes = $('#notes').val();
-        let dateOfBirth = $('#dateOfBirth').val();
-        let phoneNumber = $('#phoneNumber').val();
-        e.preventDefault();
-        console.log(username,password, firstName,lastName, emailAddress, notes, dateOfBirth, phoneNumber);
-        residentAddition(username,password, firstName,lastName, emailAddress, notes, dateOfBirth, phoneNumber);
+    // $('.propertyForm').on('submit','#addResidentForm', (e) =>{
+    //     let username = $('#username').val();
+    //     let password = $('#password').val();
+    //     let firstName = $('#firstName').val();
+    //     let lastName = $('#lastName').val();
+    //     let emailAddress = $('#emailAddress').val();
+    //     let notes = $('#notes').val();
+    //     let dateOfBirth = $('#dateOfBirth').val();
+    //     let phoneNumber = $('#phoneNumber').val();
+    //     e.preventDefault();
+    //     console.log(username,password, firstName,lastName, emailAddress, notes, dateOfBirth, phoneNumber);
+    //     residentAddition(username,password, firstName,lastName, emailAddress, notes, dateOfBirth, phoneNumber);
         
-    });
+    // });
     
-    function residentAddition(username,password, firstName,lastName, emailAddress, notes, dateOfBirth, phoneNumber){
-    $.ajax({
-      method: 'POST',
-      contentType: 'application/json',
-      processData: false,
-      url: 'https://thinkfulnode-loganrun.c9users.io/api/residents',
-      headers: {
-         Authorization: 'Bearer ' +token
-      },
-      data: JSON.stringify({
-        username: username,
-        password: password,
-        firstName: firstName,
-        lastName: lastName,
-        emailAddress: emailAddress,
-        dateOfBirth:  dateOfBirth,
-        notes:  notes,
-        phoneNumber: phoneNumber
-      })
+    // function residentAddition(username,password, firstName,lastName, emailAddress, notes, dateOfBirth, phoneNumber){
+    // $.ajax({
+    //   method: 'POST',
+    //   contentType: 'application/json',
+    //   processData: false,
+    //   url: 'https://thinkfulnode-loganrun.c9users.io/api/residents',
+    //   headers: {
+    //      Authorization: 'Bearer ' +token
+    //   },
+    //   data: JSON.stringify({
+    //     username: username,
+    //     password: password,
+    //     firstName: firstName,
+    //     lastName: lastName,
+    //     emailAddress: emailAddress,
+    //     dateOfBirth:  dateOfBirth,
+    //     notes:  notes,
+    //     phoneNumber: phoneNumber
+    //   })
      
-    }).done(function(response){
-      console.log(response);
-      let info = response;
+    // }).done(function(response){
+    //   console.log(response);
+    //   let info = response;
 
-    //   $.each(info, (index, item)=>{
-    //     let unit = item.units.unitNumber;
-    //     let area = item.units.area;
-    //     let bedroom = item.units.bedroom;
-    //     let bathroom = item.units.bathroom;
-    //     let garage = item.units.garage;
-    //     let unitId = item.units._id;
-    //     console.log(unit, area, bedroom,bathroom,garage,unitId);
-    //     // renderUnits(unit, area, bedroom, bathroom, garage,unitId);
-    //   });
-    });
-    }
+    // //   $.each(info, (index, item)=>{
+    // //     let unit = item.units.unitNumber;
+    // //     let area = item.units.area;
+    // //     let bedroom = item.units.bedroom;
+    // //     let bathroom = item.units.bathroom;
+    // //     let garage = item.units.garage;
+    // //     let unitId = item.units._id;
+    // //     console.log(unit, area, bedroom,bathroom,garage,unitId);
+    // //     // renderUnits(unit, area, bedroom, bathroom, garage,unitId);
+    // //   });
+    // });
+    // }
     
     //CLOSE MODALS
     
