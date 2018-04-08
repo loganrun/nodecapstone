@@ -27,7 +27,7 @@ $(document).ready(() => {
       method: 'POST',
       contentType: 'application/json',
       processData: false,
-      url: 'https://thinkfulnode-loganrun.c9users.io/api/users/signup',
+      url: 'https://propmanagenodecap.herokuapp.com/api/users/signup',
       data: JSON.stringify({
         password: passWord,
         username: username,
