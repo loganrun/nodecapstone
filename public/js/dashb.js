@@ -11,7 +11,7 @@ $(function(){
       method: 'GET',
       contentType: 'application/json',
       processData: false,
-      url: 'https://thinkfulnode-loganrun.c9users.io/api/properties',
+      url: 'https://propmanagenodecap.herokuapp.com/api/properties',
       headers: {
          Authorization: 'Bearer ' +token
       }
@@ -76,7 +76,7 @@ $(function(){
       method: 'POST',
       contentType: 'application/json',
       processData: false,
-      url: 'https://thinkfulnode-loganrun.c9users.io/api/properties',
+      url: 'https://propmanagenodecap.herokuapp.com/api/properties',
       headers: {
          Authorization: 'Bearer ' +token
       },
@@ -134,7 +134,7 @@ $(function(){
       method: 'DELETE',
       contentType: 'application/json',
       processData: false,
-      url: 'https://thinkfulnode-loganrun.c9users.io/api/properties/'+property_id+'/delete',
+      url: 'https://propmanagenodecap.herokuapp.com/api/properties/'+property_id+'/delete',
       headers: {
         Authorization: 'Bearer ' +token
        },
@@ -226,7 +226,7 @@ $(function(){
       method: 'POST',
       contentType: 'application/json',
       processData: false,
-      url: 'https://thinkfulnode-loganrun.c9users.io/api/properties/'+property_id+'/unit',
+      url: 'https://propmanagenodecap.herokuapp.com/api/properties/'+property_id+'/unit',
       headers: {
          Authorization: 'Bearer ' +token
       },
@@ -294,7 +294,7 @@ $(function(){
       method: 'DELETE',
       contentType: 'application/json',
       processData: false,
-      url: 'https://thinkfulnode-loganrun.c9users.io/api/properties/'+property_id+'/'+unit_id,
+      url: 'https://propmanagenodecap.herokuapp.com/api/properties/'+property_id+'/'+unit_id,
       headers: {
         Authorization: 'Bearer ' +token
        },
