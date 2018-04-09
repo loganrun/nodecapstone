@@ -36,12 +36,10 @@ html, body {
   border-radius: 3px 0 0 3px;
 }
 
-#signupForm h1{
+h1{
   color: #ffffff;
 }
-#loginForm h1{
-  color: #ffffff;
-}
+
 
 .login{
   width: 50%;
